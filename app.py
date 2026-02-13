@@ -1,9 +1,10 @@
 import streamlit as st
 import streamlit.components.v1 as components
+import base64
 
 st.set_page_config(page_title="For Lisa ❤️", page_icon="💖", layout="centered")
 
-# Hide Streamlit menu/footer
+# Hide Streamlit UI
 hide_menu = """
 <style>
 #MainMenu {visibility: hidden;}
@@ -13,92 +14,102 @@ header {visibility: hidden;}
 """
 st.markdown(hide_menu, unsafe_allow_html=True)
 
-html_code = """
+# Convert image to base64
+def get_base64(img_file):
+    with open(img_file, "rb") as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+img_base64 = get_base64("5300938775661843669_1.jpg")  # Change name if needed
+
+html_code = f"""
 <!DOCTYPE html>
 <html>
 <head>
 <style>
-body {
+body {{
+    margin: 0;
+    padding: 0;
     background: linear-gradient(135deg, #ff9a9e, #fad0c4);
     overflow: hidden;
-    text-align: center;
     font-family: 'Courier New', monospace;
+    text-align: center;
     color: white;
-}
+}}
 
-h1 {
-    font-size: 60px;
-    margin-top: 80px;
+h1 {{
+    margin-top: 40px;
+    font-size: 50px;
+}}
+
+.center-img {{
+    margin-top: 40px;
+    width: 300px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.8);
     animation: fadeIn 3s ease-in-out;
-}
+}}
 
-.typing {
-    font-size: 28px;
-    margin-top: 20px;
-    border-right: .15em solid white;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 0;
-    animation: typing 5s steps(40, end) forwards, blink .75s step-end infinite;
-}
+@keyframes fadeIn {{
+    from {{ opacity: 0; }}
+    to {{ opacity: 1; }}
+}}
 
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-}
-
-@keyframes blink {
-    from, to { border-color: transparent }
-    50% { border-color: white }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.heart {
-    position: absolute;
+.heart {{
+    position: fixed;
+    bottom: -10px;
     color: red;
     font-size: 24px;
-    animation: float 6s linear infinite;
-}
+    animation: floatUp linear infinite;
+}}
 
-@keyframes float {
-    0% { transform: translateY(100vh) scale(1); opacity: 1; }
-    100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-}
+@keyframes floatUp {{
+    0% {{
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }}
+    100% {{
+        transform: translateY(-110vh) scale(1.5);
+        opacity: 0;
+    }}
+}}
 
-.signature {
+.signature {{
     position: fixed;
     bottom: 10px;
     right: 15px;
     font-size: 12px;
     opacity: 0.6;
-}
+}}
 </style>
 </head>
 <body>
 
-<h1>To Lisa 💖</h1>
-<div class="typing">You make my world brighter every single day ✨</div>
+<h1>Happy Valentine's Day\nTo Lisa 💖</h1>
+
+<img src="data:image/jpg;base64,{img_base64}" class="center-img"/>
+
+<p style="font-size:22px; margin-top:20px;">
+You make my world brighter every single day ✨
+</p>
 
 <div class="signature">— satyam</div>
 
 <script>
-function createHeart() {
+function createHeart() {{
     const heart = document.createElement("div");
     heart.className = "heart";
     heart.innerHTML = "❤️";
     heart.style.left = Math.random() * 100 + "vw";
     heart.style.fontSize = (Math.random() * 20 + 15) + "px";
-    heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+    heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
     document.body.appendChild(heart);
 
-    setTimeout(() => {
+    setTimeout(() => {{
         heart.remove();
-    }, 6000);
-}
+    }}, 7000);
+}}
 
 setInterval(createHeart, 300);
 </script>
@@ -107,4 +118,4 @@ setInterval(createHeart, 300);
 </html>
 """
 
-components.html(html_code, height=700)
+components.html(html_code, height=800)
